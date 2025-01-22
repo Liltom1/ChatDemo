@@ -179,7 +179,9 @@ socket.on('connect', () => {
   //新建房间成功
   socket.on('newRoomSuccess', () => {
     newRoomVisible.value = false;
+    alert('新建房间成功');
     socket.emit('search', { userId: userInfo.id });//查询用户的房间
+    // socket.emit('join', { roomId: rooms.value[i].id, userName: userInfo.name });//加入一个房间
   })
 
   //加入房间成功
@@ -260,7 +262,7 @@ const uploadImg = (file) => {
   }
   const data = {
     roomId: currentId.value,
-    message: file.file.name,
+    message: `/images/`+new Date().getTime() + '_' + file.file.name,
     from: {
       id: userInfo.id,
       name: userInfo.name
@@ -270,9 +272,11 @@ const uploadImg = (file) => {
     type: 'img',
     fileName: new Date().getTime() + '_' + file.file.name
   }
-  chatList.push(data);
   //向服务器发送消息
   socket.emit('sendImgMessage', data);
+  setTimeout(() => {
+    chatList.push(data);
+  }, 1000);
   // console.log(file);
 }
 
